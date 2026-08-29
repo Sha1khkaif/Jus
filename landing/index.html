@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataPulse — Real-Time Analytics for Modern Teams</title>
+  <meta name="description" content="DataPulse brings powerful SaaS analytics to your fingertips. Real-time dashboards, AI-powered insights, and enterprise-grade security — all in one place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; width: 0%;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4, #a78bfa);
+      z-index: 999;
+      transition: width .1s linear;
+      box-shadow: 0 0 10px rgba(124,58,237,.8), 0 0 4px rgba(6,182,212,.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="scroll-progress"></div>
+
+  <!-- PARTICLE CANVAS -->
+  <canvas id="canvas-particles"></canvas>
+
+  <!-- CURSOR GLOW -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- THEME TOGGLE -->
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+    🌙
+  </button>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo" id="logo-link">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">DataPulse</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#features" id="nav-features">Features</a></li>
+        <li><a href="#dashboard" id="nav-dashboard">Dashboard</a></li>
+        <li><a href="#pricing" id="nav-pricing">Pricing</a></li>
+        <li><a href="#trust" id="nav-trust">Enterprise</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="btn-outline" id="nav-login">Log In</a>
+        <a href="#" class="btn-primary" id="nav-signup">Start Free</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge" id="hero-badge">
+        <span class="badge-dot"></span>
+        <span>Now with GPT-powered anomaly detection</span>
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        Analytics that<br />
+        <span class="gradient-text">move at your speed</span>
+      </h1>
+      <p class="hero-sub" id="hero-sub">
+        DataPulse transforms raw data into crystal-clear decisions.
+        Real-time dashboards, AI insights, and collaboration tools — built for teams that don't wait.
+      </p>
+      <div class="hero-actions" id="hero-actions">
+        <a href="#" class="btn-primary btn-lg" id="hero-cta-primary">
+          Start Free Trial
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-ghost btn-lg" id="hero-cta-demo">
+          <span class="play-icon">▶</span> Watch Demo
+        </a>
+      </div>
+      <div class="hero-meta" id="hero-meta">
+        <span>✓ No credit card required</span>
+        <span>✓ 14-day free trial</span>
+        <span>✓ Cancel anytime</span>
+      </div>
+    </div>
+
+    <!-- LIVE DASHBOARD MOCKUP -->
+    <div class="dashboard-mockup" id="dashboard-mockup">
+      <div class="mockup-chrome">
+        <div class="chrome-dots">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+        </div>
+        <div class="chrome-url">app.datapulse.io/dashboard</div>
+      </div>
+      <div class="mockup-body">
+        <!-- Stat Cards Row -->
+        <div class="stat-row">
+          <div class="stat-card glass" id="stat-revenue">
+            <div class="stat-label">Monthly Revenue</div>
+            <div class="stat-val" id="anim-revenue">$0</div>
+            <div class="stat-change up">↑ 18.4%</div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill" style="--w:72%"></div>
+            </div>
+          </div>
+          <div class="stat-card glass" id="stat-users">
+            <div class="stat-label">Active Users</div>
+            <div class="stat-val" id="anim-users">0</div>
+            <div class="stat-change up">↑ 9.2%</div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill" style="--w:58%"></div>
+            </div>
+          </div>
+          <div class="stat-card glass" id="stat-uptime">
+            <div class="stat-label">Uptime</div>
+            <div class="stat-val">99.98%</div>
+            <div class="stat-change up">↑ SLA met</div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill" style="--w:99%"></div>
+            </div>
+          </div>
+          <div class="stat-card glass" id="stat-churn">
+            <div class="stat-label">Churn Rate</div>
+            <div class="stat-val">1.2%</div>
+            <div class="stat-change down">↓ 0.4%</div>
+            <div class="mini-bar">
+              <div class="mini-bar-fill churn" style="--w:12%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Area -->
+        <div class="chart-row">
+          <div class="chart-card glass wide" id="chart-main">
+            <div class="chart-header">
+              <span class="chart-title">Revenue Overview</span>
+              <div class="chart-tabs">
+                <span class="tab active" id="tab-7d">7D</span>
+                <span class="tab" id="tab-30d">30D</span>
+                <span class="tab" id="tab-90d">90D</span>
+              </div>
+            </div>
+            <div class="line-chart" id="line-chart">
+              <svg viewBox="0 0 400 120" class="chart-svg" id="chart-svg" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path id="area-path" d="" fill="url(#lineGrad)" class="area-fill"/>
+                <path id="line-path" d="" fill="none" stroke="#a78bfa" stroke-width="2.5" stroke-linecap="round" class="line-stroke"/>
+                <g id="chart-dots"></g>
+              </svg>
+            </div>
+          </div>
+          <div class="chart-card glass narrow" id="chart-donut">
+            <div class="chart-header">
+              <span class="chart-title">Traffic Sources</span>
+            </div>
+            <div class="donut-wrap">
+              <svg viewBox="0 0 100 100" class="donut-svg" id="donut-svg">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="14"/>
+                <circle class="donut-seg seg-1" cx="50" cy="50" r="38" fill="none" stroke="#7c3aed" stroke-width="14" stroke-dasharray="0 239" stroke-linecap="round"/>
+                <circle class="donut-seg seg-2" cx="50" cy="50" r="38" fill="none" stroke="#06b6d4" stroke-width="14" stroke-dasharray="0 239" stroke-linecap="round"/>
+                <circle class="donut-seg seg-3" cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="14" stroke-dasharray="0 239" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-total">38K</div>
+                <div class="donut-label">visitors</div>
+              </div>
+            </div>
+            <div class="legend">
+              <div class="legend-item"><span class="leg-dot" style="background:#7c3aed"></span>Organic 48%</div>
+              <div class="legend-item"><span class="leg-dot" style="background:#06b6d4"></span>Referral 31%</div>
+              <div class="legend-item"><span class="leg-dot" style="background:#f59e0b"></span>Paid 21%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live feed -->
+        <div class="feed-card glass" id="feed-card">
+          <div class="feed-header">
+            <span class="chart-title">Live Events</span>
+            <span class="live-badge"><span class="live-dot"></span>LIVE</span>
+          </div>
+          <div class="feed-list" id="feed-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS STRIP -->
+  <section class="logos-strip" id="logos-strip">
+    <p class="logos-label">Trusted by teams at</p>
+    <div class="logos-track">
+      <div class="logos-inner" id="logos-inner">
+        <span class="logo-pill">Stripe</span>
+        <span class="logo-pill">Notion</span>
+        <span class="logo-pill">Vercel</span>
+        <span class="logo-pill">Linear</span>
+        <span class="logo-pill">Figma</span>
+        <span class="logo-pill">Supabase</span>
+        <span class="logo-pill">Shopify</span>
+        <span class="logo-pill">Twilio</span>
+        <span class="logo-pill">Stripe</span>
+        <span class="logo-pill">Notion</span>
+        <span class="logo-pill">Vercel</span>
+        <span class="logo-pill">Linear</span>
+        <span class="logo-pill">Figma</span>
+        <span class="logo-pill">Supabase</span>
+        <span class="logo-pill">Shopify</span>
+        <span class="logo-pill">Twilio</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <div class="section-pill">Features</div>
+      <h2 class="section-title">Everything your team needs to <span class="gradient-text">ship faster</span></h2>
+      <p class="section-sub">From ingestion to insight in seconds. No data engineering degree required.</p>
+    </div>
+    <div class="features-grid" id="features-grid">
+      <div class="feature-card glass feature-big" id="feat-realtime">
+        <div class="feat-icon-wrap purple">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3>Real-Time Streaming</h3>
+        <p>Sub-100ms data pipelines with WebSocket-powered live updates. Watch your metrics move as events happen.</p>
+        <div class="feat-visual stream-visual">
+          <div class="stream-line" style="--d:0s;--w:60%"></div>
+          <div class="stream-line" style="--d:0.3s;--w:80%"></div>
+          <div class="stream-line" style="--d:0.6s;--w:45%"></div>
+          <div class="stream-line" style="--d:0.9s;--w:70%"></div>
+          <div class="stream-line" style="--d:1.2s;--w:55%"></div>
+        </div>
+      </div>
+
+      <div class="feature-card glass" id="feat-ai">
+        <div class="feat-icon-wrap cyan">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a4 4 0 014 4v1h1a3 3 0 010 6h-1v1a4 4 0 01-8 0v-1H7a3 3 0 010-6h1V6a4 4 0 014-4z"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+        </div>
+        <h3>AI Anomaly Detection</h3>
+        <p>GPT-powered signals that alert you before problems become outages. Zero false positives.</p>
+      </div>
+
+      <div class="feature-card glass" id="feat-collab">
+        <div class="feat-icon-wrap amber">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Team Workspaces</h3>
+        <p>Share dashboards, annotate anomalies, and set role-based permissions for every stakeholder.</p>
+      </div>
+
+      <div class="feature-card glass" id="feat-integrations">
+        <div class="feat-icon-wrap purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="6" height="10" rx="2"/><rect x="16" y="7" width="6" height="10" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+        </div>
+        <h3>200+ Integrations</h3>
+        <p>Connect Stripe, Salesforce, BigQuery, Postgres, Snowflake, and 195 more in one click.</p>
+      </div>
+
+      <div class="feature-card glass" id="feat-reports">
+        <div class="feat-icon-wrap cyan">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Scheduled Reports</h3>
+        <p>Auto-generate and deliver beautiful PDF/Slack reports on your cadence — daily, weekly, or monthly.</p>
+      </div>
+
+      <div class="feature-card glass feature-big" id="feat-security">
+        <div class="feat-icon-wrap amber">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Enterprise Security</h3>
+        <p>SOC 2 Type II, GDPR compliant, end-to-end encryption, SSO/SAML, and audit logs. Your data, your rules.</p>
+        <div class="security-badges">
+          <span class="sec-badge">SOC 2</span>
+          <span class="sec-badge">GDPR</span>
+          <span class="sec-badge">HIPAA</span>
+          <span class="sec-badge">ISO 27001</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="dashboard">
+    <div class="section-header">
+      <div class="section-pill">How it works</div>
+      <h2 class="section-title">From <span class="gradient-text">zero to insight</span> in 3 steps</h2>
+    </div>
+    <div class="steps" id="steps-row">
+      <div class="step" id="step-1">
+        <div class="step-num">01</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <h3>Connect your data</h3>
+        <p>OAuth or API key. Connect your stack in under 60 seconds.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step" id="step-2">
+        <div class="step-num">02</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Build your dashboard</h3>
+        <p>Drag-and-drop widgets or choose from 80+ pre-built templates.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step" id="step-3">
+        <div class="step-num">03</div>
+        <div class="step-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Get AI insights</h3>
+        <p>DataPulse surfaces anomalies, trends, and recommendations automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="section-header">
+      <div class="section-pill">Pricing</div>
+      <h2 class="section-title">Simple, <span class="gradient-text">transparent pricing</span></h2>
+      <p class="section-sub">All plans include a 14-day free trial. No credit card required.</p>
+    </div>
+    <div class="toggle-row" id="toggle-row">
+      <span id="toggle-monthly" class="toggle-opt active">Monthly</span>
+      <label class="toggle-switch" for="billing-toggle">
+        <input type="checkbox" id="billing-toggle" />
+        <span class="slider"></span>
+      </label>
+      <span id="toggle-annual" class="toggle-opt">Annual <span class="save-badge">Save 20%</span></span>
+    </div>
+    <div class="pricing-grid" id="pricing-grid">
+      <!-- Starter -->
+      <div class="price-card glass" id="plan-starter">
+        <div class="plan-header">
+          <div class="plan-name">Starter</div>
+          <div class="plan-tagline">For indie hackers &amp; small teams</div>
+        </div>
+        <div class="plan-price">
+          <span class="currency">$</span>
+          <span class="amount" data-monthly="29" data-annual="23">29</span>
+          <span class="period">/mo</span>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> 5 dashboards</li>
+          <li><span class="check">✓</span> 10 data sources</li>
+          <li><span class="check">✓</span> 1M events/month</li>
+          <li><span class="check">✓</span> 3 team members</li>
+          <li><span class="check">✓</span> Email alerts</li>
+          <li><span class="muted">–</span> AI anomaly detection</li>
+          <li><span class="muted">–</span> SSO / SAML</li>
+        </ul>
+        <a href="#" class="btn-outline plan-btn" id="btn-starter">Get Started</a>
+      </div>
+
+      <!-- Pro (Featured) -->
+      <div class="price-card glass featured" id="plan-pro">
+        <div class="popular-tag">Most Popular</div>
+        <div class="plan-header">
+          <div class="plan-name">Pro</div>
+          <div class="plan-tagline">For growing teams that move fast</div>
+        </div>
+        <div class="plan-price">
+          <span class="currency">$</span>
+          <span class="amount" data-monthly="89" data-annual="71">89</span>
+          <span class="period">/mo</span>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Unlimited dashboards</li>
+          <li><span class="check">✓</span> 50 data sources</li>
+          <li><span class="check">✓</span> 50M events/month</li>
+          <li><span class="check">✓</span> 15 team members</li>
+          <li><span class="check">✓</span> Slack + webhook alerts</li>
+          <li><span class="check">✓</span> AI anomaly detection</li>
+          <li><span class="muted">–</span> SSO / SAML</li>
+        </ul>
+        <a href="#" class="btn-primary plan-btn" id="btn-pro">Start Free Trial</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="price-card glass" id="plan-enterprise">
+        <div class="plan-header">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-tagline">For orgs that demand scale &amp; control</div>
+        </div>
+        <div class="plan-price">
+          <span class="currency"></span>
+          <span class="amount custom">Custom</span>
+        </div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Unlimited everything</li>
+          <li><span class="check">✓</span> 200+ integrations</li>
+          <li><span class="check">✓</span> Unlimited events</li>
+          <li><span class="check">✓</span> Unlimited members</li>
+          <li><span class="check">✓</span> Priority support SLA</li>
+          <li><span class="check">✓</span> AI anomaly detection</li>
+          <li><span class="check">✓</span> SSO / SAML &amp; audit log</li>
+        </ul>
+        <a href="#" class="btn-outline plan-btn" id="btn-enterprise">Talk to Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="section-header">
+      <div class="section-pill">Testimonials</div>
+      <h2 class="section-title">Loved by <span class="gradient-text">10,000+ teams</span></h2>
+    </div>
+    <div class="testi-grid" id="testi-grid">
+      <div class="testi-card glass" id="testi-1">
+        <div class="stars">★★★★★</div>
+        <p>"DataPulse cut our analytics setup from 3 weeks to 3 hours. The AI alerts alone saved us $40K in an incident last month."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background: linear-gradient(135deg, #7c3aed, #06b6d4)">SL</div>
+          <div>
+            <div class="author-name">Sarah L.</div>
+            <div class="author-role">CTO @ Stackblast</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card glass" id="testi-2">
+        <div class="stars">★★★★★</div>
+        <p>"The glassmorphism UI is stunning, but what really won us over is how fast the data refreshes. We're talking milliseconds."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background: linear-gradient(135deg, #06b6d4, #f59e0b)">MK</div>
+          <div>
+            <div class="author-name">Marcus K.</div>
+            <div class="author-role">Head of Data @ Vortex</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card glass" id="testi-3">
+        <div class="stars">★★★★★</div>
+        <p>"We migrated from Tableau and Looker combined. DataPulse does more, costs less, and our team actually uses it."</p>
+        <div class="testi-author">
+          <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #7c3aed)">AJ</div>
+          <div>
+            <div class="author-name">Aisha J.</div>
+            <div class="author-role">VP Analytics @ Prismatic</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BADGES -->
+  <section class="trust" id="trust">
+    <div class="section-header">
+      <div class="section-pill">Enterprise Ready</div>
+      <h2 class="section-title">Security &amp; compliance you can <span class="gradient-text">stake your reputation on</span></h2>
+    </div>
+    <div class="trust-grid" id="trust-grid">
+      <div class="trust-card glass" id="trust-soc2">
+        <div class="trust-icon">🛡️</div>
+        <div class="trust-name">SOC 2 Type II</div>
+        <div class="trust-desc">Audited annually by independent security firm</div>
+      </div>
+      <div class="trust-card glass" id="trust-gdpr">
+        <div class="trust-icon">🇪🇺</div>
+        <div class="trust-name">GDPR Compliant</div>
+        <div class="trust-desc">Full data residency controls and DPA available</div>
+      </div>
+      <div class="trust-card glass" id="trust-hipaa">
+        <div class="trust-icon">🏥</div>
+        <div class="trust-name">HIPAA Ready</div>
+        <div class="trust-desc">BAA signing available on Enterprise plan</div>
+      </div>
+      <div class="trust-card glass" id="trust-encrypt">
+        <div class="trust-icon">🔐</div>
+        <div class="trust-name">E2E Encryption</div>
+        <div class="trust-desc">AES-256 at rest, TLS 1.3 in transit</div>
+      </div>
+      <div class="trust-card glass" id="trust-uptime">
+        <div class="trust-icon">⚡</div>
+        <div class="trust-name">99.99% Uptime SLA</div>
+        <div class="trust-desc">Multi-region active-active redundancy</div>
+      </div>
+      <div class="trust-card glass" id="trust-sso">
+        <div class="trust-icon">🔑</div>
+        <div class="trust-name">SSO / SAML 2.0</div>
+        <div class="trust-desc">Okta, Azure AD, Google Workspace supported</div>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar glass" id="stats-bar">
+      <div class="stat-item">
+        <div class="stat-big" id="counter-users">0</div>
+        <div class="stat-small">Companies</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-big" id="counter-events">0B+</div>
+        <div class="stat-small">Events processed</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-big">99.99%</div>
+        <div class="stat-small">Uptime last 12mo</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-big">&lt;80ms</div>
+        <div class="stat-small">Avg. query time</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section" id="cta-section">
+    <div class="cta-bg">
+      <div class="orb orb-cta1"></div>
+      <div class="orb orb-cta2"></div>
+    </div>
+    <div class="cta-content" id="cta-content">
+      <h2 class="cta-title">Ready to make data your <span class="gradient-text">superpower</span>?</h2>
+      <p class="cta-sub">Join 10,000+ teams shipping smarter with DataPulse. Your first 14 days are on us.</p>
+      <div class="cta-actions">
+        <a href="#" class="btn-primary btn-lg" id="cta-primary-btn">Start Free — No Card Needed</a>
+        <a href="#" class="btn-ghost btn-lg" id="cta-secondary-btn">Schedule a Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo" id="footer-logo">
+          <span class="logo-icon">⬡</span>
+          <span class="logo-text">DataPulse</span>
+        </a>
+        <p>Analytics for teams that don't wait.</p>
+        <div class="socials">
+          <a href="#" id="social-twitter" aria-label="Twitter">𝕏</a>
+          <a href="#" id="social-github" aria-label="GitHub">⌥</a>
+          <a href="#" id="social-linkedin" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Integrations</a>
+          <a href="#">Changelog</a>
+          <a href="#">Roadmap</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="#">Press</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="#">Docs</a>
+          <a href="#">API Reference</a>
+          <a href="#">Status</a>
+          <a href="#">Support</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookie Policy</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DataPulse, Inc. All rights reserved.</p>
+      <p>Made with ♥ for data-driven teams</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
